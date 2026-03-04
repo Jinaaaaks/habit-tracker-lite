@@ -114,6 +114,24 @@ export function useHabits() {
 
   const todayCount = habits.filter(isCheckedToday).length
 
+  function getLast7Days(habit) {
+    const days = []
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date()
+        d.setDate(d.getDate() - i)
+        const dateStr = d.toISOString().split('T')[0]
+        const entry = habit.checkIns.find(c => c.date === dateStr)
+        days.push({
+            date: dateStr,
+            checked: !!entry,
+            note: entry?.note || '',
+            label: d.toLocaleDateString('en-US', { weekday: 'short' }),
+            dayNum: d.getDate(),
+        })
+    }
+    return days
+  }
+
   return {
     habits,
     addHabit,
@@ -121,6 +139,7 @@ export function useHabits() {
     toggleCheckIn,
     isCheckedToday,
     getTodayNote,
+    getLast7Days,
     getStreak,
     getBestStreak,
     getCompletionRate,

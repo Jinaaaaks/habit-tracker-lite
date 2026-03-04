@@ -1,7 +1,14 @@
 import { useHabits } from '../useHabits'
 
 export default function Stats() {
-  const { habits, getStreak, getBestStreak, getCompletionRate, isCheckedToday } = useHabits()
+  const {
+    habits,
+    getStreak,
+    getBestStreak,
+    getCompletionRate,
+    isCheckedToday,
+    getLast7Days,
+  } = useHabits()
 
   const totalCheckIns = habits.reduce((sum, h) => sum + h.checkIns.length, 0)
   const overallBestStreak = habits.reduce((max, h) => Math.max(max, getBestStreak(h)), 0)
@@ -32,6 +39,7 @@ export default function Stats() {
         <p className="page-subtitle">Your progress at a glance</p>
       </div>
 
+      {/* Big Numbers */}
       <div className="stats-grid">
         <div className="stat-card glass">
           <div className="stat-number">{habits.length}</div>
@@ -55,7 +63,7 @@ export default function Stats() {
         </div>
       </div>
 
-      {/* Per-habit breakdown */}
+      {/* Per-habit breakdown with heatmap */}
       <h2 className="section-label">Per Habit</h2>
 
       <div className="habit-stats-list">
@@ -64,22 +72,44 @@ export default function Stats() {
           const best = getBestStreak(habit)
           const rate = getCompletionRate(habit)
           const checked = isCheckedToday(habit)
+          const last7 = getLast7Days(habit)
 
           return (
             <div key={habit.id} className="habit-stat-row glass">
-              <div>
-                <div className="habit-stat-name">
-                  {checked ? '✅ ' : ''}{habit.name}
+
+              {/* Top row — name + badges */}
+              <div className="habit-stat-top">
+                <div>
+                  <div className="habit-stat-name">
+                    {checked ? '✅ ' : ''}{habit.name}
+                  </div>
+                  <div className="progress-bar-wrap" style={{ width: '120px' }}>
+                    <div className="progress-bar-fill" style={{ width: `${rate}%` }} />
+                  </div>
                 </div>
-                <div className="progress-bar-wrap">
-                  <div className="progress-bar-fill" style={{ width: `${rate}%` }} />
+                <div className="habit-stat-badges">
+                  <span className="mini-badge badge-streak">🔥 {streak}</span>
+                  <span className="mini-badge badge-best">⭐ {best}</span>
+                  <span className="mini-badge badge-rate">{rate}%</span>
                 </div>
               </div>
-              <div className="habit-stat-badges">
-                <span className="mini-badge badge-streak">🔥 {streak}</span>
-                <span className="mini-badge badge-best">⭐ {best}</span>
-                <span className="mini-badge badge-rate">{rate}%</span>
+
+              {/* Heatmap row — last 7 days */}
+              <div className="heatmap">
+                {last7.map(day => (
+                  <div key={day.date} className="heatmap-col">
+                    <div
+                      className={`heatmap-cell ${day.checked ? 'filled' : ''}`}
+                      title={day.note ? `${day.date}: ${day.note}` : day.date}
+                    >
+                      {day.checked ? '✓' : ''}
+                    </div>
+                    <div className="heatmap-label">{day.label}</div>
+                    <div className="heatmap-num">{day.dayNum}</div>
+                  </div>
+                ))}
               </div>
+
             </div>
           )
         })}

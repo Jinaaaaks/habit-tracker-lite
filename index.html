@@ -5,6 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/habit-tracker-lite/image.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>habit-tracker-lite</title>
+    <script>
+      const redirect = sessionStorage.getItem('redirect');
+      if (redirect && redirect !== '/') {
+        sessionStorage.removeItem('redirect');
+        window.history.replaceState(null, '', '/habit-tracker-lite' + redirect);
+      }
+    </script>
     <script type="module" crossorigin src="/habit-tracker-lite/assets/index-D3FDfIkt.js"></script>
     <link rel="stylesheet" crossorigin href="/habit-tracker-lite/assets/index-i1jLue6i.css">
   </head>

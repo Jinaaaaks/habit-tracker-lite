@@ -1,13 +1,40 @@
+import { useState } from 'react'
 import { useHabits } from '../useHabits'
 
 export default function Home() {
   const { habits, deleteHabit, toggleCheckIn, isCheckedToday } = useHabits()
+
+  const [inputVal, setInputVal] = useState('')
+
+  function handleAdd() {
+    const ok = addHabit(inputVal)
+    if (ok) setInputVal('')
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') handleAdd()
+  } 
 
   return (
     <div>
       <div className="page-header">
         <h1 className="page-title">Today's Habits 🌿</h1>
         <p className="page-subtitle">Small steps. Big life.</p>
+      </div>
+
+      <div className="add-form glass">
+        <input
+            className="add-input"
+            type="text"
+            placeholder="Add a new habit... e.g. Read 10 pages"
+            value={inputVal}
+            onChange={e => setInputVal(e.target.value)}
+            onKeyDown={handleKeyDown}
+            maxLength={60}
+        />
+        <button className="btn btn-primary" onClick={handleAdd}>
+            + Add
+        </button>
       </div>
 
       {habits.length === 0 ? (

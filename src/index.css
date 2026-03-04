@@ -259,3 +259,15 @@ body {
 .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); border-radius: 4px; transition: width 0.6s ease; }
 
 .stats-legend { text-align: center; margin-top: 28px; font-size: 0.78rem; color: var(--text-muted); }
+
+.today-banner {
+  padding: 14px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.today-date { font-size: 0.85rem; color: var(--text-secondary); }
+
+.today-progress { font-size: 0.85rem; color: var(--accent); font-weight: 600; }

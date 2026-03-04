@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useHabits } from '../useHabits'
 
 export default function Home() {
-  const { habits, addHabit, deleteHabit, toggleCheckIn, isCheckedToday, getStreak } = useHabits()
+  const { habits, addHabit, deleteHabit, toggleCheckIn, isCheckedToday, getStreak, todayCount, totalHabits } = useHabits()
 
   const [inputVal, setInputVal] = useState('')
 
@@ -15,13 +15,33 @@ export default function Home() {
     if (e.key === 'Enter') handleAdd()
   } 
 
+  const todayLable = new Date().toLocaleDateString('en-US',{ weekday: 'long', month: 'short', day: 'numeric' })
+
   return (
     <div>
       <div className="page-header">
         <h1 className="page-title">Today's Habits 🌿</h1>
         <p className="page-subtitle">Small steps. Big life.</p>
       </div>
-
+      {/* Today Banner */}
+      {totalHabits > 0 && (
+        <div className="today-banner glass">
+          <span className="today-date">{todayLable}</span>
+            <span className="today-progress">
+              {todayCount}/{totalHabits} done
+              {todayCount === totalHabits ? ' 🎉' : ''}
+            </span>
+      </div>
+      )}
+      {/*Progress Bar */}
+      {totalHabits > 0 && (
+        <div className="progress-bar-wrap" style={{ marginBottom: '20px' }}>
+          <div
+            className="progress-bar-fill"
+            style={{ width: `${(todayCount / totalHabits) * 100}%` }}
+          />
+        </div>
+      )}
       <div className="add-form glass">
         <input
             className="add-input"

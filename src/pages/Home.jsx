@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useHabits } from '../useHabits'
 
 export default function Home() {
-  const { habits, deleteHabit, toggleCheckIn, isCheckedToday } = useHabits()
+  const { habits, addHabit, deleteHabit, toggleCheckIn, isCheckedToday, getStreak } = useHabits()
 
   const [inputVal, setInputVal] = useState('')
 
@@ -47,6 +47,7 @@ export default function Home() {
         <div className="habit-list">
           {habits.map(habit => {
             const checked = isCheckedToday(habit)
+            const streak = getStreak(habit)
             return (
               <div key={habit.id} className={`habit-card glass ${checked ? 'checked-today' : ''}`}>
                 <button
@@ -56,9 +57,20 @@ export default function Home() {
                   {checked ? '✓' : ''}
                 </button>
                 <div className="habit-info">
-                  <div className={`habit-name ${checked ? 'done-text' : ''}`}>
-                    {habit.name}
-                  </div>
+                    <div className={`habit-name ${checked ? 'done-text' : ''}`}>
+                        {habit.name}
+                    </div>
+                    <div className="habit-meta">
+                        {streak > 0 ? (
+                        <span className="streak-badge">
+                            🔥 {streak} day{streak !== 1 ? 's' : ''}
+                        </span>
+                        ) : (
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                            Start your streak today!
+                        </span>
+                        )}
+                    </div>
                 </div>
                 <button className="btn btn-icon" onClick={() => deleteHabit(habit.id)}>
                   ✕

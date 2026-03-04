@@ -70,3 +70,39 @@ body {
   border-radius: 20px;
   box-shadow: var(--shadow-lg);
 }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  margin-bottom: 32px;
+  border-radius: 60px;
+}
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+}
+.nav-brand span { color: var(--accent); }
+.nav-links { display: flex; gap: 6px; }
+.nav-link {
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.nav-link:hover {
+  background: var(--glass-hover);
+  color: white;
+  border-color: var(--glass-border);
+}
+.nav-link.active {
+  background: var(--glass-strong);
+  color: white;
+  border-color: var(--glass-border);
+}

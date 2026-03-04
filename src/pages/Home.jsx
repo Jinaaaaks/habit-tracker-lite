@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useHabits } from '../useHabits'
+import { useHabits, CATEGORIES } from '../useHabits'
 
 export default function Home() {
   const {
@@ -15,12 +15,17 @@ export default function Home() {
   } = useHabits()
 
   const [inputVal, setInputVal] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('Other')
+  const [activeFilter, setActiveFilter] = useState('All')
   const [openNoteId, setOpenNoteId] = useState(null)
   const [noteVal, setNoteVal] = useState('')
 
   function handleAdd() {
-    const ok = addHabit(inputVal)
-    if (ok) setInputVal('')
+    const ok = addHabit(inputVal, selectedCategory)
+    if (ok) {
+      setInputVal('')
+      setSelectedCategory('Other')
+    }
   }
 
   function handleKeyDown(e) {
@@ -30,6 +35,10 @@ export default function Home() {
   const todayLabel = new Date().toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric'
   })
+
+  const filteredHabits = activeFilter === 'All'
+    ? habits
+    : habits.filter(h => h.category === activeFilter)
 
   return (
     <div>
@@ -60,6 +69,15 @@ export default function Home() {
           onKeyDown={handleKeyDown}
           maxLength={60}
         />
+        <select
+          className="category-select"
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(e.target.value)}
+        >
+          {CATEGORIES.filter(c => c !== 'All').map(c => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
         <button className="btn btn-primary" onClick={handleAdd}>
           + Add
         </button>
@@ -75,16 +93,29 @@ export default function Home() {
         </div>
       )}
 
+      {/* Category Filter Pills */}
+      <div className="filter-pills">
+        {CATEGORIES.map(c => (
+          <button
+            key={c}
+            className={`filter-pill ${activeFilter === c ? 'active' : ''}`}
+            onClick={() => setActiveFilter(c)}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+
       {/* Habit List */}
-      {habits.length === 0 ? (
+      {filteredHabits.length === 0 ? (
         <div className="empty-state glass">
           <div className="empty-icon">🌱</div>
-          <h3>No habits yet</h3>
+          <h3>{activeFilter === 'All' ? 'No habits yet' : `No ${activeFilter} habits yet`}</h3>
           <p>Add your first habit above to get started!</p>
         </div>
       ) : (
         <div className="habit-list">
-          {habits.map(habit => {
+          {filteredHabits.map(habit => {
             const checked = isCheckedToday(habit)
             const streak = getStreak(habit)
             return (
@@ -112,6 +143,9 @@ export default function Home() {
                       {habit.name}
                     </div>
                     <div className="habit-meta">
+                      <span className={`category-badge cat-${habit.category?.toLowerCase()}`}>
+                        {habit.category || 'Other'}
+                      </span>
                       {streak > 0 ? (
                         <span className="streak-badge">
                           🔥 {streak} day{streak !== 1 ? 's' : ''}
@@ -129,7 +163,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Note Input — opens when clicking unchecked habit */}
+                {/* Note Input */}
                 {openNoteId === habit.id && !checked && (
                   <div className="note-input-wrap">
                     <input
@@ -159,7 +193,7 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Saved Note — shows after checking in */}
+                {/* Saved Note */}
                 {checked && getTodayNote(habit) && (
                   <div className="note-saved">
                     💬 {getTodayNote(habit)}

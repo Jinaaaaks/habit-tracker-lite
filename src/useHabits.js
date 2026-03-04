@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 
+export const CATEGORIES = ['All', 'Health', 'Study', 'Mindset', 'Other']
 const STORAGE_KEY = 'habit-tracker-lite-v1'
 
 function getTodayStr() {
@@ -60,14 +61,15 @@ export function useHabits() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(habits))
   }, [habits])
 
-  function addHabit(name) {
+  function addHabit(name, category = 'Other') {
     const trimmed = name.trim()
     if (!trimmed) return false
     const newHabit = {
-      id: Date.now().toString(),
-      name: trimmed,
-      createdAt: getTodayStr(),
-      checkIns: [],
+        id: Date.now().toString(),
+        name: trimmed,
+        category,
+        createdAt: getTodayStr(),
+        checkIns: [],
     }
     setHabits(prev => [newHabit, ...prev])
     return true

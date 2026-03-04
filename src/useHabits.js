@@ -8,7 +8,8 @@ function getTodayStr() {
 
 function calculateStreak(checkIns) {
   if (!checkIns || checkIns.length === 0) return 0
-  const sorted = [...checkIns].sort((a, b) => b.localeCompare(a))
+  const dates = checkIns.map(c => c.date)
+  const sorted = [...dates].sort((a, b) => b.localeCompare(a))
   let streak = 0
   let current = getTodayStr()
 
@@ -27,7 +28,7 @@ function calculateStreak(checkIns) {
 
 function calculateBestStreak(checkIns) {
   if (!checkIns || checkIns.length === 0) return 0
-  const sorted = [...new Set(checkIns)].sort()
+  const sorted = [...new Set(checkIns.map(c => c.date))].sort()
   let best = 1
   let current = 1
 
@@ -76,22 +77,26 @@ export function useHabits() {
     setHabits(prev => prev.filter(h => h.id !== id))
   }
 
-  function toggleCheckIn(id) {
+  function toggleCheckIn(id, note = '') {
     const today = getTodayStr()
     setHabits(prev => prev.map(h => {
-      if (h.id !== id) return h
-      const alreadyChecked = h.checkIns.includes(today)
-      return {
+        if (h.id !== id) return h
+        const alreadyChecked = h.checkIns.some(c => c.date === today)
+        return {
         ...h,
         checkIns: alreadyChecked
-          ? h.checkIns.filter(d => d !== today)
-          : [...h.checkIns, today]
-      }
+            ? h.checkIns.filter(c => c.date !== today)
+            : [...h.checkIns, { date: today, note }]
+        }
     }))
   }
 
+  function getTodayNote(habit) {
+    const entry = habit.checkIns.find(c => c.date === getTodayStr())
+    return entry ? entry.note : ''
+  }
   function isCheckedToday(habit) {
-    return habit.checkIns.includes(getTodayStr())
+    return habit.checkIns.some(c => c.date === getTodayStr())
   }
 
   function getStreak(habit) { return calculateStreak(habit.checkIns) }
@@ -113,6 +118,7 @@ export function useHabits() {
     deleteHabit,
     toggleCheckIn,
     isCheckedToday,
+    getTodayNote,
     getStreak,
     getBestStreak,
     getCompletionRate,

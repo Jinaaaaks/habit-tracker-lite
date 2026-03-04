@@ -271,3 +271,47 @@ body {
 .today-date { font-size: 0.85rem; color: var(--text-secondary); }
 
 .today-progress { font-size: 0.85rem; color: var(--accent); font-weight: 600; }
+
+.habit-card {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.habit-card-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.note-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.note-input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: white;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.note-input::placeholder { color: var(--text-muted); }
+.note-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+
+.note-saved {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--glass-border);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}

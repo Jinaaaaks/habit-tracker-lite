@@ -1,7 +1,7 @@
 import { useHabits } from '../useHabits'
 
 export default function Stats() {
-  const { habits, getBestStreak, getCompletionRate } = useHabits()
+  const { habits, getStreak, getBestStreak, getCompletionRate, isCheckedToday } = useHabits()
 
   const totalCheckIns = habits.reduce((sum, h) => sum + h.checkIns.length, 0)
   const overallBestStreak = habits.reduce((max, h) => Math.max(max, getBestStreak(h)), 0)
@@ -54,6 +54,40 @@ export default function Stats() {
           <div className="stat-label">Avg Completion</div>
         </div>
       </div>
+
+      {/* Per-habit breakdown */}
+      <h2 className="section-label">Per Habit</h2>
+
+      <div className="habit-stats-list">
+        {habits.map(habit => {
+          const streak = getStreak(habit)
+          const best = getBestStreak(habit)
+          const rate = getCompletionRate(habit)
+          const checked = isCheckedToday(habit)
+
+          return (
+            <div key={habit.id} className="habit-stat-row glass">
+              <div>
+                <div className="habit-stat-name">
+                  {checked ? '✅ ' : ''}{habit.name}
+                </div>
+                <div className="progress-bar-wrap">
+                  <div className="progress-bar-fill" style={{ width: `${rate}%` }} />
+                </div>
+              </div>
+              <div className="habit-stat-badges">
+                <span className="mini-badge badge-streak">🔥 {streak}</span>
+                <span className="mini-badge badge-best">⭐ {best}</span>
+                <span className="mini-badge badge-rate">{rate}%</span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <p className="stats-legend">
+        🔥 current streak · ⭐ best streak · % completion
+      </p>
     </div>
   )
 }

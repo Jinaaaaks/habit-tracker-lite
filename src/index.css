@@ -220,3 +220,42 @@ body {
   letter-spacing: 0.08em;
   font-weight: 500;
 }
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+
+.habit-stats-list { display: flex; flex-direction: column; gap: 10px; }
+
+.habit-stat-row {
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.habit-stat-name { font-weight: 500; font-size: 0.95rem; margin-bottom: 6px; }
+
+.habit-stat-badges { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+.mini-badge {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.badge-streak { background: rgba(251,191,36,0.15); color: var(--accent-warm); border: 1px solid rgba(251,191,36,0.3); }
+.badge-best { background: rgba(125,211,252,0.12); color: var(--accent); border: 1px solid rgba(125,211,252,0.25); }
+.badge-rate { background: rgba(74,222,128,0.12); color: var(--success); border: 1px solid rgba(74,222,128,0.25); }
+
+.progress-bar-wrap { height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; width: 120px; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); border-radius: 4px; transition: width 0.6s ease; }
+
+.stats-legend { text-align: center; margin-top: 28px; font-size: 0.78rem; color: var(--text-muted); }
